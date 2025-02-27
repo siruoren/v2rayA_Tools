@@ -241,4 +241,7 @@ if __name__ == "__main__":
 
 if sub_num in range(1,int(CONFIG["apply_subscription_id"])+1):
     sub_id=sub_num
-    main()
+    try:
+        main()
+    except:
+        printf("There is no {sub_id},skip......")

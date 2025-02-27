@@ -2,7 +2,6 @@ __pycache__
 config.*
 *.bat
 *.exe
-*.sh
 *.log
 *.png
 *.rar

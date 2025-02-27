@@ -111,7 +111,7 @@ def enable_Proxy():
 
 def bulid_request_body(node_ids) -> list:
     '''构建请求体, NUMBER_OF_NODE_GROUP_MEMBERS 个节点为一组, 以测试节点延迟'''
-    sub_id = int(CONFIG["apply_subscription_id"]) - 1
+    sub_id = int(sub_id) - 1
     _nodes = []
     for i in node_ids:
         _nodes.append({"id": i,"_type": "subscriptionServer","sub": sub_id})
@@ -137,9 +137,9 @@ def connect_on(nodes_id, outbounds, status):
     '''为出站连接节点
     传入参数: nodes_id - 节点id, outbounds - 出站列表, status - 当前服务状态
     '''
-    sub_id = int(CONFIG["apply_subscription_id"]) - 1
+    sub_id = int(sub_id) - 1
     for sub in status["data"]["touch"]["subscriptions"]:
-        if sub["id"] == int(CONFIG["apply_subscription_id"]):sub_nodes_info = sub["servers"]
+        if sub["id"] == int(sub_id):sub_nodes_info = sub["servers"]
     num = 0
     for outbound in outbounds:
         url = f"{HOST}/api/connection"
@@ -166,7 +166,7 @@ def connect_cancel(connect):
 def nodes_filter(status, outbounds_num) -> list:
     '''筛选节点, 传入当前服务状态和出站数量, 返回筛选后的节点列表'''
     for sub in status["data"]["touch"]["subscriptions"]:
-        if sub["id"] == int(CONFIG["apply_subscription_id"]):nodes = sub["servers"]
+        if sub["id"] == int(sub_id):nodes = sub["servers"]
     healthy_nodes = []
     for node in nodes:
         if "ms" in node["pingLatency"]:healthy_nodes.append(node)
@@ -187,7 +187,7 @@ def test_nodes():
     # 获取服务状态
     status = get_status()
     # 获取订阅的节点延迟
-    sub_id = CONFIG["apply_subscription_id"]
+    # sub_id = CONFIG["apply_subscription_id"]
     for sub in status["data"]["touch"]["subscriptions"]:
         if sub["id"] == sub_id:
             node_num = len(sub["servers"])
@@ -238,4 +238,7 @@ def main():
         if reset_switch == 1:logging.info("有端口出错, 重新设置代理")
 
 if __name__ == "__main__":
+
+if sub_num in range(1,int(CONFIG["apply_subscription_id"])+1):
+    sub_id=sub_num
     main()

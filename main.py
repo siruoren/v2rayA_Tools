@@ -112,7 +112,7 @@ def enable_Proxy():
 def bulid_request_body(node_ids) -> list:
     '''构建请求体, NUMBER_OF_NODE_GROUP_MEMBERS 个节点为一组, 以测试节点延迟'''
     _nodes = []
-    for id_num <= apply_subscription_id:
+    for (id_num=1;id_num <= apply_subscription_id;id_num++):
         try:
             sub_id = int(CONFIG["id_num"]) - 1
     

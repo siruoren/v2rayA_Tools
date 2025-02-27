@@ -170,20 +170,20 @@ def nodes_filter(status, outbounds_num,sub_num) -> list:
         if sub["id"] == int(sub_id):nodes = sub["servers"]
     healthy_nodes = []
     for node in nodes:
-        if "ms" in node["pingLatency"]:
+        if "UNSUPPORTED" in node["pingLatency"]:
+            continue
+        else:
             healthy_nodes.append(node)
-
-            
     logging.info(f"共有 {len(healthy_nodes)} 个节点")
-    for node in healthy_nodes:
-        # 字符替换, node["pingLatency"] 的值去掉 "ms" 字符
-        node["pingLatency"] = int(node["pingLatency"].replace("ms", ""))
-    if RANDOM_SELECTED_NODE:
-        # healthy_nodes 随机排序
-        random.shuffle(healthy_nodes)
-    else:
-        # 根据 pingLatency ping的结果由小到大排序
-        healthy_nodes.sort(key=lambda x: x["pingLatency"])
+    # for node in healthy_nodes:
+    #     # 字符替换, node["pingLatency"] 的值去掉 "ms" 字符
+    #     node["pingLatency"] = int(node["pingLatency"].replace("ms", ""))
+    # if RANDOM_SELECTED_NODE:
+    #     # healthy_nodes 随机排序
+    #     random.shuffle(healthy_nodes)
+    # else:
+    #     # 根据 pingLatency ping的结果由小到大排序
+    #     healthy_nodes.sort(key=lambda x: x["pingLatency"])
     return [node["id"] for node in healthy_nodes]
 
 def test_nodes(sub_num):
@@ -205,7 +205,7 @@ def test_nodes(sub_num):
                 if node["net"] in NODE_PROTOCOL_BLACKLIST:node_ids.remove(node["id"])
     msg = f" , 排除了 {node_num - len(node_ids)} 个节点, 实际 {len(node_ids)} 个节点" if len(node_ids) < node_num else ""
     logging.info(f"准备测试节点延迟, 本次选择的订阅为 {sub_name} , 节点数量为 {node_num}{msg}")
-    test_httpLatency(bulid_request_body(node_ids,sub_id))
+    # test_httpLatency(bulid_request_body(node_ids,sub_id))
 
 def reset_proxy(sub_num):
     outbounds = get_outbounds()
@@ -219,7 +219,9 @@ def reset_proxy(sub_num):
     else:
         msg = "启动代理"
         logging.info("当前代理停用状态")
-
+    # connectedServer = status["data"]["touch"]["connectedServer"]    # 获取连接的服务器
+    # if connectedServer: # 如果有连接的节点
+    #     for connect in connectedServer:connect_cancel(connect)  # 则都取消
     if len(good_nodes_id) > 0:
         connect_on(good_nodes_id, outbounds, status,sub_num)
         logging.info(f"启动代理: {enable_Proxy()}")

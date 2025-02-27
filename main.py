@@ -245,4 +245,4 @@ if __name__ == "__main__":
         try:
             main(sub_num)
         except:
-            print(f"There is no {sub_id},skip......")
+            print(f"There is no {sub_num},skip......")

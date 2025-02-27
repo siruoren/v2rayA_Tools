@@ -64,13 +64,13 @@ def updateSub(id):
     headers = {"authorization": TOKEN,"content-type": "application/json"}
     response = requests.request("PUT", url, json=payload, headers=headers)
 
-def main():
+def main(sub_num):
     load_config()
     login()
     # 获取服务状态
     status = get_status()
     sub_info = status["data"]["touch"]["subscriptions"]
-    applied_sub_id = CONFIG['apply_subscription_id']
+    applied_sub_id = sub_num
     sub_start_time = int(time.time())
     if status["data"]["running"]:
         logging.info(f"停用代理: {disable_Proxy()}")
@@ -84,4 +84,10 @@ def main():
             break
 
 if __name__ == "__main__":
-    main()
+    load_config()
+    for sub_num in range(1,int(CONFIG["apply_subscription_id"])+1):
+        main(sub_num)
+        try:
+            main(sub_num)
+        except:
+            print(f"There is no {sub_id},skip......")

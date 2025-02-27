@@ -64,7 +64,7 @@ def updateSub(id):
     headers = {"authorization": TOKEN,"content-type": "application/json"}
     response = requests.request("PUT", url, json=payload, headers=headers)
 
-def main():
+def main(sub_num):
     load_config()
     login()
     # 获取服务状态
@@ -84,4 +84,10 @@ def main():
     logging.info(f"更新了{len(sub_info)}个订阅, 共耗时 {end_time - start_time} 秒")
 
 if __name__ == "__main__":
-    main()
+    load_config()
+    for sub_num in range(1,int(CONFIG["apply_subscription_id"])+1):
+        main(sub_num)
+        try:
+            main(sub_num)
+        except:
+            print(f"There is no {sub_id},skip......")

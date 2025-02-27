@@ -27,12 +27,12 @@ def get_container_ip(container_name):
         inspect_output = json.loads(result.stdout)
 
         # 获取容器的 IP 地址
-        ip_address = inspect_output[0]['NetworkSettings']['Networks'].get('1panel-network',{}).get('IPAddress',None)
+        ip_address = inspect_output[0]['NetworkSettings']['Networks'].get('1panel-network',{}).get('IPAddress','localhost')
 
         return ip_address
     except subprocess.CalledProcessError as e:
         print(f"Error inspecting container: {e}")
-        return None
+        return 'localhost'
 
 
 def login():

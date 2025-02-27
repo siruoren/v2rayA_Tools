@@ -50,12 +50,12 @@ def get_container_ip(container_name):
         inspect_output = json.loads(result.stdout)
 
         # 获取容器的 IP 地址
-        ip_address = inspect_output[0]['NetworkSettings']['Networks'].get('1panel-network',{}).get('IPAddress',None)
+        ip_address = inspect_output[0]['NetworkSettings']['Networks'].get('1panel-network',{}).get('IPAddress','localhost')
 
         return ip_address
     except subprocess.CalledProcessError as e:
         logging.info(f"Error inspecting container: {e}")
-        return None
+        return 'localhost'
 
 
 def check_port():
@@ -111,11 +111,13 @@ def enable_Proxy():
 
 def bulid_request_body(node_ids) -> list:
     '''构建请求体, NUMBER_OF_NODE_GROUP_MEMBERS 个节点为一组, 以测试节点延迟'''
-    sub_id = int(CONFIG["apply_subscription_id"]) - 1
     _nodes = []
-    for i in node_ids:
-        _nodes.append({"id": i,"_type": "subscriptionServer","sub": sub_id})
-    # 分割 nodes 列表， NUMBER_OF_NODE_GROUP_MEMBERS 为一组
+    for id_num <= apply_subscription_id:
+        sub_id = int(CONFIG["id_num"]) - 1
+ 
+        for i in node_ids:
+            _nodes.append({"id": i,"_type": "subscriptionServer","sub": sub_id})
+        # 分割 nodes 列表， NUMBER_OF_NODE_GROUP_MEMBERS 为一组
     _nodes = [_nodes[i:i+NUMBER_OF_NODE_GROUP_MEMBERS] for i in range(0, len(_nodes), NUMBER_OF_NODE_GROUP_MEMBERS)]
     nodes = [json.dumps(group).replace("'", '"') for group in _nodes]
     return nodes

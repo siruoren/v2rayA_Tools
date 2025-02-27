@@ -27,7 +27,7 @@
 | forced_reset_proxy           | bool     | 为`true`时强制重设代理<br>为`false`时会先测试http入站端口，有端口异常才会重设代理 |
 | username                     | str      | 用户名                                                       |
 | password                     | str      | 密码                                                         |
-| apply_subscription_id        | int      | 应用的订阅的id，每次只会测试该订阅的节点                     |
+| apply_subscription_id        | int      | 应用的订阅的id数，每次只会测试订阅数的节点                     |
 | number_of_node_group_members | int      | 若有大量节点，则分多次测试，每次测试的节点数量上限。<br>例如共有650个节点，`number_of_node_group_members`值为100，则共分1次测试，前6次测试100个节点，第7次测试剩余的50个节点 |
 | random_selected_node         | bool     | 假设共有10个出站<br>为`true`时会从测试后可用的节点里随机选出10个绑定出站<br>为`false`时会将可用的节点排序，选择延迟最低的10个节点绑定出站 |
 | node_name_blacklist          | list     | 这是一个列表，当节点名中的某个字符包含在其中，则该节点不会参与测试 |

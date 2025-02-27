@@ -1,13 +1,13 @@
 {
-    "v2raya_container_name": "v2rayA",
+    "v2raya_container_name": "v2raya",
     "webui_port": 2017,
     "forced_reset_proxy": true,
-    "username": "v2rayA_webui_username",
-    "password": "v2rayA_webui_passwore",
-    "apply_subscription_id": 1,
+    "username": "admin",
+    "password": "password",
+    "apply_subscription_id": 6,
     "number_of_node_group_members": 110,
     "random_selected_node": true,
     "node_name_blacklist":[],
     "node_protocol_blacklist":[],
-    "v2raya_config": "/home/v2raya/config.json"
+    "v2raya_config": "/root/v2raya/config/config.json"
 }

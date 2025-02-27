@@ -170,8 +170,10 @@ def nodes_filter(status, outbounds_num,sub_num) -> list:
         if sub["id"] == int(sub_id):nodes = sub["servers"]
     healthy_nodes = []
     for node in nodes:
-        # if "ms" in node["pingLatency"]:healthy_nodes.append(node)
-        healthy_nodes.append(node)
+        if "UNSUPPORTED" in node["pingLatency"]:
+            print("skip")
+        else:
+            healthy_nodes.append(node)
     logging.info(f"共有 {len(healthy_nodes)} 个节点")
     # for node in healthy_nodes:
     #     # 字符替换, node["pingLatency"] 的值去掉 "ms" 字符
@@ -218,8 +220,8 @@ def reset_proxy(sub_num):
         msg = "启动代理"
         logging.info("当前代理停用状态")
     connectedServer = status["data"]["touch"]["connectedServer"]    # 获取连接的服务器
-    # if connectedServer: # 如果有连接的节点
-    #     for connect in connectedServer:connect_cancel(connect)  # 则都取消
+    if connectedServer: # 如果有连接的节点
+        for connect in connectedServer:connect_cancel(connect)  # 则都取消
     if len(good_nodes_id) > 0:
         connect_on(good_nodes_id, outbounds, status,sub_num)
         logging.info(f"启动代理: {enable_Proxy()}")

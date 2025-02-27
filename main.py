@@ -140,23 +140,23 @@ def connect_on(nodes_id, outbounds, status,sub_num):
     sub_id = int(sub_num) - 1
     for sub in status["data"]["touch"]["subscriptions"]:
         if sub["id"] == int(sub_num):sub_nodes_info = sub["servers"]
-    num = 0
-    for outbound in outbounds:
-        url = f"{HOST}/api/connection"
-        try:node_id = nodes_id[num]
-        except IndexError:node_id = nodes_id[0]
-        
-        payload = {
-                    "id": node_id,
-                    "_type": "subscriptionServer",
-                    "sub": sub_id,
-                    "outbound": outbound
-                }
-        requests.post(url, json=payload, headers={"Authorization": TOKEN, "content-type": "application/json"})
-        for node in sub_nodes_info:
-            if node["id"] == node_id:node_info = node 
-        logging.info(f"为出站 {outbound} 连接节点 {node_info.get('name')}, 延迟 {node_info.get('pingLatency')}")
-        num += 1
+    for num in range(0,len(node_id)):
+        for outbound in outbounds:
+            url = f"{HOST}/api/connection"
+            try:node_id = nodes_id[num]
+            except IndexError:node_id = nodes_id[0]
+            
+            payload = {
+                        "id": node_id,
+                        "_type": "subscriptionServer",
+                        "sub": sub_id,
+                        "outbound": outbound
+                    }
+            requests.post(url, json=payload, headers={"Authorization": TOKEN, "content-type": "application/json"})
+            for node in sub_nodes_info:
+                if node["id"] == node_id:node_info = node 
+            logging.info(f"为出站 {outbound} 连接节点 {node_info.get('name')}, 延迟 {node_info.get('pingLatency')}")
+
 
 def connect_cancel(connect):
     '''取消节点的连接'''
@@ -182,7 +182,7 @@ def nodes_filter(status, outbounds_num,sub_num) -> list:
     # else:
     #     # 根据 pingLatency ping的结果由小到大排序
     #     healthy_nodes.sort(key=lambda x: x["pingLatency"])
-    return [node["id"] for node in healthy_nodes[:outbounds_num]]
+    return [node["id"] for node in healthy_nodes]
 
 def test_nodes(sub_num):
     '''测试节点'''
@@ -218,8 +218,8 @@ def reset_proxy(sub_num):
         msg = "启动代理"
         logging.info("当前代理停用状态")
     connectedServer = status["data"]["touch"]["connectedServer"]    # 获取连接的服务器
-    if connectedServer: # 如果有连接的节点
-        for connect in connectedServer:connect_cancel(connect)  # 则都取消
+    # if connectedServer: # 如果有连接的节点
+    #     for connect in connectedServer:connect_cancel(connect)  # 则都取消
     if len(good_nodes_id) > 0:
         connect_on(good_nodes_id, outbounds, status,sub_num)
         logging.info(f"启动代理: {enable_Proxy()}")

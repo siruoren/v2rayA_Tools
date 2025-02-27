@@ -241,7 +241,6 @@ def main(sub_num):
 if __name__ == "__main__":
     load_config()
     for sub_num in range(1,int(CONFIG["apply_subscription_id"])+1):
-        main(sub_num)
         try:
             main(sub_num)
         except:

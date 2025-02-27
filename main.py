@@ -140,7 +140,7 @@ def connect_on(nodes_id, outbounds, status,sub_num):
     sub_id = int(sub_num) - 1
     for sub in status["data"]["touch"]["subscriptions"]:
         if sub["id"] == int(sub_num):sub_nodes_info = sub["servers"]
-    for num in range(0,len(node_id)):
+    for num in range(0,len(nodes_id)):
         for outbound in outbounds:
             url = f"{HOST}/api/connection"
             try:node_id = nodes_id[num]

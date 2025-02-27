@@ -109,9 +109,9 @@ def disable_Proxy():
 def enable_Proxy():
     return requests.post(f"{HOST}/api/v2ray", headers={"Authorization": TOKEN}).json()["code"]
 
-def bulid_request_body(node_ids) -> list:
+def bulid_request_body(node_ids,sub_num) -> list:
     '''构建请求体, NUMBER_OF_NODE_GROUP_MEMBERS 个节点为一组, 以测试节点延迟'''
-    sub_id = int(sub_id) - 1
+    sub_id = int(sub_num) - 1
     _nodes = []
     for i in node_ids:
         _nodes.append({"id": i,"_type": "subscriptionServer","sub": sub_id})
@@ -133,13 +133,13 @@ def test_httpLatency(nodes):
         timestamp = int(time.time())
     logging.info(f"测试节点延迟完成, 共耗时 {int(time.time()) - start_time} 秒")
 
-def connect_on(nodes_id, outbounds, status):
+def connect_on(nodes_id, outbounds, status,sub_num):
     '''为出站连接节点
     传入参数: nodes_id - 节点id, outbounds - 出站列表, status - 当前服务状态
     '''
-    sub_id = int(sub_id) - 1
+    sub_id = int(sub_num) - 1
     for sub in status["data"]["touch"]["subscriptions"]:
-        if sub["id"] == int(sub_id):sub_nodes_info = sub["servers"]
+        if sub["id"] == int(sub_num):sub_nodes_info = sub["servers"]
     num = 0
     for outbound in outbounds:
         url = f"{HOST}/api/connection"
@@ -163,8 +163,9 @@ def connect_cancel(connect):
     url = f"{HOST}/api/connection"
     requests.delete(url, json=connect, headers={"Authorization": TOKEN, "content-type": "application/json"})
 
-def nodes_filter(status, outbounds_num) -> list:
+def nodes_filter(status, outbounds_num,sub_num) -> list:
     '''筛选节点, 传入当前服务状态和出站数量, 返回筛选后的节点列表'''
+    sub_id=sub_num
     for sub in status["data"]["touch"]["subscriptions"]:
         if sub["id"] == int(sub_id):nodes = sub["servers"]
     healthy_nodes = []
@@ -182,12 +183,12 @@ def nodes_filter(status, outbounds_num) -> list:
         healthy_nodes.sort(key=lambda x: x["pingLatency"])
     return [node["id"] for node in healthy_nodes[:outbounds_num]]
 
-def test_nodes():
+def test_nodes(sub_num):
     '''测试节点'''
     # 获取服务状态
     status = get_status()
     # 获取订阅的节点延迟
-    # sub_id = CONFIG["apply_subscription_id"]
+    sub_id = sub_num
     for sub in status["data"]["touch"]["subscriptions"]:
         if sub["id"] == sub_id:
             node_num = len(sub["servers"])
@@ -201,12 +202,12 @@ def test_nodes():
                 if node["net"] in NODE_PROTOCOL_BLACKLIST:node_ids.remove(node["id"])
     msg = f" , 排除了 {node_num - len(node_ids)} 个节点, 实际 {len(node_ids)} 个节点" if len(node_ids) < node_num else ""
     logging.info(f"准备测试节点延迟, 本次选择的订阅为 {sub_name} , 节点数量为 {node_num}{msg}")
-    test_httpLatency(bulid_request_body(node_ids))
+    test_httpLatency(bulid_request_body(node_ids,sub_id))
 
-def reset_proxy():
+def reset_proxy(sub_num):
     outbounds = get_outbounds()
     status = get_status() # 获取服务状态
-    good_nodes_id = nodes_filter(status, len(outbounds))
+    good_nodes_id = nodes_filter(status, len(outbounds),sub_num)
     # 如果代理开启, 则停用代理
     start_time = int(time.time())
     if status["data"]["running"]:
@@ -216,32 +217,32 @@ def reset_proxy():
         msg = "启动代理"
         logging.info("当前代理停用状态")
     connectedServer = status["data"]["touch"]["connectedServer"]    # 获取连接的服务器
-    if connectedServer: # 如果有连接的节点
-        for connect in connectedServer:connect_cancel(connect)  # 则都取消
+    # if connectedServer: # 如果有连接的节点
+    #     for connect in connectedServer:connect_cancel(connect)  # 则都取消
     if len(good_nodes_id) > 0:
-        connect_on(good_nodes_id, outbounds, status)
+        connect_on(good_nodes_id, outbounds, status,sub_num)
         logging.info(f"启动代理: {enable_Proxy()}")
         end_time = int(time.time())
         logging.info(f"{msg} 耗时 {end_time - start_time} 秒")
     else:logging.info("没有可用的节点")
 
-def main():
+def main(sub_num):
     load_config()
     reset_switch = 1 if FORCED_RESET_PROXY else check_port()
     if reset_switch == 1:
         login()
-        test_nodes()
+        test_nodes(sub_num)
     elif reset_switch == 0:logging.info("无异常端口")
     while reset_switch == 1:
-        reset_proxy()
+        reset_proxy(sub_num)
         reset_switch = check_port()
         if reset_switch == 1:logging.info("有端口出错, 重新设置代理")
 
 if __name__ == "__main__":
-
-if sub_num in range(1,int(CONFIG["apply_subscription_id"])+1):
-    sub_id=sub_num
-    try:
-        main()
-    except:
-        printf("There is no {sub_id},skip......")
+    load_config()
+    for sub_num in range(1,int(CONFIG["apply_subscription_id"])+1):
+        main(sub_num)
+        try:
+            main(sub_num)
+        except:
+            print(f"There is no {sub_id},skip......")

@@ -173,15 +173,15 @@ def nodes_filter(status, outbounds_num,sub_num) -> list:
         # if "ms" in node["pingLatency"]:healthy_nodes.append(node)
         healthy_nodes.append(node)
     logging.info(f"共有 {len(healthy_nodes)} 个健康的节点")
-    for node in healthy_nodes:
-        # 字符替换, node["pingLatency"] 的值去掉 "ms" 字符
-        node["pingLatency"] = int(node["pingLatency"].replace("ms", ""))
-    if RANDOM_SELECTED_NODE:
-        # healthy_nodes 随机排序
-        random.shuffle(healthy_nodes)
-    else:
-        # 根据 pingLatency ping的结果由小到大排序
-        healthy_nodes.sort(key=lambda x: x["pingLatency"])
+    # for node in healthy_nodes:
+    #     # 字符替换, node["pingLatency"] 的值去掉 "ms" 字符
+    #     node["pingLatency"] = int(node["pingLatency"].replace("ms", ""))
+    # if RANDOM_SELECTED_NODE:
+    #     # healthy_nodes 随机排序
+    #     random.shuffle(healthy_nodes)
+    # else:
+    #     # 根据 pingLatency ping的结果由小到大排序
+    #     healthy_nodes.sort(key=lambda x: x["pingLatency"])
     return [node["id"] for node in healthy_nodes[:outbounds_num]]
 
 def test_nodes(sub_num):

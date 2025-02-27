@@ -113,11 +113,14 @@ def bulid_request_body(node_ids) -> list:
     '''构建请求体, NUMBER_OF_NODE_GROUP_MEMBERS 个节点为一组, 以测试节点延迟'''
     _nodes = []
     for id_num <= apply_subscription_id:
-        sub_id = int(CONFIG["id_num"]) - 1
- 
-        for i in node_ids:
-            _nodes.append({"id": i,"_type": "subscriptionServer","sub": sub_id})
-        # 分割 nodes 列表， NUMBER_OF_NODE_GROUP_MEMBERS 为一组
+        try:
+            sub_id = int(CONFIG["id_num"]) - 1
+    
+            for i in node_ids:
+                _nodes.append({"id": i,"_type": "subscriptionServer","sub": sub_id})
+        except:
+            print("There is no sub_id: ${sub_id}")
+    # 分割 nodes 列表， NUMBER_OF_NODE_GROUP_MEMBERS 为一组
     _nodes = [_nodes[i:i+NUMBER_OF_NODE_GROUP_MEMBERS] for i in range(0, len(_nodes), NUMBER_OF_NODE_GROUP_MEMBERS)]
     nodes = [json.dumps(group).replace("'", '"') for group in _nodes]
     return nodes

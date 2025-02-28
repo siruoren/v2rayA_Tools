@@ -37,25 +37,7 @@ def load_config():
 
 def get_container_ip(container_name):
     '''获取容器的IP地址'''
-    try:
-        # 获取容器的详细信息
-        result = subprocess.run(
-            ["docker", "inspect", container_name],
-            capture_output=True,
-            text=True,
-            check=True
-        )
-
-        # 解析 JSON 输出
-        inspect_output = json.loads(result.stdout)
-
-        # 获取容器的 IP 地址
-        ip_address = inspect_output[0]['NetworkSettings']['Networks'].get('1panel-network',{}).get('IPAddress','localhost')
-
-        return ip_address
-    except subprocess.CalledProcessError as e:
-        logging.info(f"Error inspecting container: {e}")
-        return 'localhost'
+    return 'localhost'
 
 
 def check_port():

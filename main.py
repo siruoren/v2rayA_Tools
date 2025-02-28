@@ -156,7 +156,7 @@ def nodes_filter(status, outbounds_num,sub_num) -> list:
             healthy_nodes.append(node)
 
             
-    logging.info(f"共有 {len(healthy_nodes)} 个节点")
+    logging.info(f"共有 {len(healthy_nodes)} 个健康节点")
     for node in healthy_nodes:
         # 字符替换, node["pingLatency"] 的值去掉 "ms" 字符
         node["pingLatency"] = int(node["pingLatency"].replace("ms", ""))

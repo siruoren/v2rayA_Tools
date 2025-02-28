@@ -205,7 +205,7 @@ def reset_proxy(sub_num):
     connectedServer = status["data"]["touch"]["connectedServer"]    # 获取连接的服务器
     if connectedServer: # 如果有当前订阅连接的节点
         for connect in connectedServer:
-            if f': {sub_id},' in str(connect):
+            if f"""'sub': {sub_id},""" in str(connect):
                 print(f"start to cancel {connect}")
                 connect_cancel(connect)  # 则都取消
     if len(good_nodes_id) > 0:

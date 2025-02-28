@@ -174,6 +174,9 @@ def test_nodes(sub_num):
     status = get_status()
     # 获取订阅的节点延迟
     sub_id = sub_num
+    if len(status["data"]["touch"]["subscriptions"]) < int(sub_id):
+        logging.info("未找到订阅id, 请检查订阅是否正常")
+        return 1
     for sub in status["data"]["touch"]["subscriptions"]:
         if sub["id"] == sub_id:
             node_num = len(sub["servers"])
@@ -233,4 +236,4 @@ if __name__ == "__main__":
         try:
             main(sub_num)
         except:
-            print(f"There is no {sub_num},skip......")
+            print(f"There is no sub_id:{sub_num},skip......")

@@ -175,7 +175,7 @@ def test_nodes(sub_num):
     # 获取订阅的节点延迟
     sub_id = sub_num
     if len(status["data"]["touch"]["subscriptions"]) < int(sub_id):
-        logging.info("未找到订阅id, 请检查订阅是否正常")
+        logging.info(f"未找到订阅id:{sub_num}, 请检查订阅是否正常")
         return 1
     for sub in status["data"]["touch"]["subscriptions"]:
         if sub["id"] == sub_id:

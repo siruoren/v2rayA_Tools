@@ -9,5 +9,5 @@
     "random_selected_node": true,
     "node_name_blacklist":[],
     "node_protocol_blacklist":[],
-    "v2raya_config": "/root/v2raya/config/config.json"
+    "v2raya_config": "../config/config.json"
 }

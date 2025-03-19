@@ -218,17 +218,25 @@ def reset_proxy(sub_num):
         logging.info(f"{msg} 耗时 {end_time - start_time} 秒")
     else:logging.info("没有可用的节点")
 
+
+
 def main(sub_num):
     load_config()
-    reset_switch = 1 if FORCED_RESET_PROXY else check_port()
-    if reset_switch == 1:
-        login()
-        test_nodes(sub_num)
-    elif reset_switch == 0:logging.info("无异常端口")
-    while reset_switch == 1:
-        reset_proxy(sub_num)
-        reset_switch = check_port()
-        if reset_switch == 1:logging.info("有端口出错, 重新设置代理")
+    login()
+    test_nodes(sub_num)
+    reset_proxy(sub_num)
+
+# def main(sub_num):
+#     load_config()
+#     reset_switch = 1 if FORCED_RESET_PROXY else check_port()
+#     if reset_switch == 1:
+#         login()
+#         test_nodes(sub_num)
+#     elif reset_switch == 0:logging.info("无异常端口")
+#     while reset_switch == 1:
+#         reset_proxy(sub_num)
+#         reset_switch = check_port()
+#         if reset_switch == 1:logging.info("有端口出错, 重新设置代理")
 
 if __name__ == "__main__":
     load_config()

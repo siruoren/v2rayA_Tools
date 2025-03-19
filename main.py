@@ -242,6 +242,7 @@ if __name__ == "__main__":
     load_config()
     for sub_num in range(1,int(CONFIG["apply_subscription_id"])+1):
         try:
+            print(f"start to check sub_id:{sub_num}")
             main(sub_num)
         except:
             logging.info(f"There is no sub_id:{sub_num},skip......")

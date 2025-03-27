@@ -6,8 +6,8 @@
     "password": "password",
     "apply_subscription_id": 10,
     "number_of_node_group_members": 110,
-    "random_selected_node": true,
+    "random_selected_node": false,
     "node_name_blacklist":[],
     "node_protocol_blacklist":[],
-    "v2raya_config": "../config/config.json"
+    "v2raya_config": "/etc/v2raya/config.json"
 }

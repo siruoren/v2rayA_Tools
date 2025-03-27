@@ -216,7 +216,7 @@ def reset_proxy(sub_num):
         logging.info(f"启动代理: {enable_Proxy()}")
         end_time = int(time.time())
         logging.info(f"{msg} 耗时 {end_time - start_time} 秒")
-    else:logging.info("没有可用的节点")
+    else:logging.info(f"没有可用的节点: {enable_Proxy()}")
 
 
 

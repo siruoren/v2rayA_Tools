@@ -225,7 +225,10 @@ def main(sub_num):
     login()
     test_nodes(sub_num)
     reset_proxy(sub_num)
-
+    time.sleep(5)
+    check_switch = check_port()
+    if check_switch == 1:
+        reset_proxy(sub_num)
 # def main(sub_num):
 #     load_config()
 #     reset_switch = 1 if FORCED_RESET_PROXY else check_port()

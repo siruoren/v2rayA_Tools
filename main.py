@@ -225,10 +225,8 @@ def main(sub_num):
     login()
     test_nodes(sub_num)
     reset_proxy(sub_num)
-    time.sleep(5)
-    check_switch = check_port()
-    if check_switch == 1:
-        reset_proxy(sub_num)
+    time.sleep(2)
+
 # def main(sub_num):
 #     load_config()
 #     reset_switch = 1 if FORCED_RESET_PROXY else check_port()
@@ -243,9 +241,12 @@ def main(sub_num):
 
 if __name__ == "__main__":
     load_config()
+    login()
     for sub_num in range(1,int(CONFIG["apply_subscription_id"])+1):
         try:
             print(f"start to connect sub_id:{sub_num}......")
             main(sub_num)
         except:
             logging.info(f"There is no sub_id:{sub_num},skip......")
+    
+    print(f"Start Enable Proxy: {enable_Proxy()}")

@@ -9,30 +9,11 @@ TOKEN = ""
 def load_config():
     global CONFIG, HOST, NUMBER_OF_NODE_GROUP_MEMBERS
     with open("config.json", "r", encoding='utf8') as f:CONFIG = json.load(f)
-    HOST = f"http://{get_container_ip(CONFIG['v2raya_container_name'])}:{CONFIG['webui_port']}"
+    HOST = f"http://{get_container_ip(CONFIG['v2raya_ip'])}:{CONFIG['webui_port']}"
     NUMBER_OF_NODE_GROUP_MEMBERS = CONFIG['number_of_node_group_members']
 
-def get_container_ip(container_name):
-    '''获取容器的IP地址'''
-    try:
-        # 获取容器的详细信息
-        result = subprocess.run(
-            ["docker", "inspect", container_name],
-            capture_output=True,
-            text=True,
-            check=True
-        )
-
-        # 解析 JSON 输出
-        inspect_output = json.loads(result.stdout)
-
-        # 获取容器的 IP 地址
-        ip_address = inspect_output[0]['NetworkSettings']['Networks'].get('1panel-network',{}).get('IPAddress','localhost')
-
-        return ip_address
-    except subprocess.CalledProcessError as e:
-        print(f"Error inspecting container: {e}")
-        return 'localhost'
+def get_container_ip(ip):
+    return ip
 
 
 def login():

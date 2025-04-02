@@ -16,7 +16,7 @@ NODE_NAME_BLACKLIST = []
 NODE_PROTOCOL_BLACKLIST = []
 '''节点协议黑名单，涉及到的节点不参与延迟测试'''
 CONFIG = {}
-V2RAYA_CONTAINER_NAME = "v2rayA"
+V2RAYA_IP = ""
 FORCED_RESET_PROXY = True
 HOST = ""
 TOKEN = ""
@@ -24,9 +24,9 @@ PROXY_HOST = ""
 V2RAYA_CONFIG = ""
 
 def load_config():
-    global CONFIG, V2RAYA_CONTAINER_NAME, FORCED_RESET_PROXY, HOST, NUMBER_OF_NODE_GROUP_MEMBERS, RANDOM_SELECTED_NODE, NODE_NAME_BLACKLIST, NODE_PROTOCOL_BLACKLIST, PROXY_HOST, V2RAYA_CONFIG
+    global CONFIG, V2RAYA_IP, FORCED_RESET_PROXY, HOST, NUMBER_OF_NODE_GROUP_MEMBERS, RANDOM_SELECTED_NODE, NODE_NAME_BLACKLIST, NODE_PROTOCOL_BLACKLIST, PROXY_HOST, V2RAYA_CONFIG
     with open("config.json", "r", encoding='utf8') as f:CONFIG = json.load(f)
-    HOST = f"http://{get_container_ip(CONFIG['v2raya_container_name'])}:{CONFIG['webui_port']}"
+    HOST = f"http://{get_container_ip(CONFIG['v2raya_ip'])}:{CONFIG['webui_port']}"
     FORCED_RESET_PROXY = CONFIG['forced_reset_proxy']
     NUMBER_OF_NODE_GROUP_MEMBERS = CONFIG['number_of_node_group_members']
     RANDOM_SELECTED_NODE = CONFIG['random_selected_node']

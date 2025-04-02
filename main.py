@@ -244,9 +244,9 @@ if __name__ == "__main__":
     login()
     for sub_num in range(1,int(CONFIG["apply_subscription_id"])+1):
         try:
-            print(f"start to connect sub_id:{sub_num}......")
+            logging.info(f"start to connect sub_id:{sub_num}......")
             main(sub_num)
         except:
             logging.info(f"There is no sub_id:{sub_num},skip......")
     
-    print(f"Start Enable Proxy: {enable_Proxy()}")
+    logging.info(f"Start Enable Proxy: {enable_Proxy()}")

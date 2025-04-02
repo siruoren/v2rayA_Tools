@@ -248,11 +248,11 @@ if __name__ == "__main__":
     connectedServer = status["data"]["touch"]["connectedServer"]    # 获取连接的服务器
     if connectedServer: # 如果有连接的节点
         for connect in connectedServer:
-            print(f"start to cancel {connect}")
+            logging.info(f"start to cancel {connect}")
             connect_cancel(connect)  # 则都取消
 
     for sub_num in range(1,int(CONFIG["apply_subscription_id"])+1):
         try:
             main(sub_num)
         except:
-            print(f"There is no {sub_num},skip......")
+            logging.info(f"There is no {sub_num},skip......")

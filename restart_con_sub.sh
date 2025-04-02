@@ -1,7 +1,8 @@
 #!/bin/bash
 cd $(dirname $0);
-echo "START TIME: `date`" > restart.log
-python3 updateSub.py >> restart.log 2>&1
+mkdir -p logs;
+echo "START TIME: `date`" > logs/restart.log
+python3 updateSub.py 2>&1|tee logs/restart.log
 
-python3 main.py >> restart.log 2>&1
-echo "END TIME: `date`"  >> restart.log
+python3 main.py  2>&1|tee logs/restart.log 
+echo "END TIME: `date`"  >> logs/restart.log

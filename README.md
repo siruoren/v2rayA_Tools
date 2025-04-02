@@ -6,7 +6,7 @@
 
 ```json
 {
-    "v2raya_container_name": "v2rayA",
+    "v2raya_ip": "localhost",
     "webui_port": 2017,
     "forced_reset_proxy": true,
     "username": "v2rayA_webui_username",
@@ -22,7 +22,7 @@
 
 | 键名                         | 值的属性 | 说明                                                         |
 | ---------------------------- | -------- | ------------------------------------------------------------ |
-| v2raya_container_name        | str      | v2rayA 的容器名                                              |
+| v2raya_ip        | str      | v2rayA 的ip地址，默认是localhost                                              |
 | webui_port                   | int      | v2rayA 的 webui 端口，默认是2017                             |
 | forced_reset_proxy           | bool     | 为`true`时强制重设代理<br>为`false`时会先测试http入站端口，有端口异常才会重设代理 |
 | username                     | str      | 用户名                                                       |
@@ -36,7 +36,7 @@
 
 ### main.py
 
-自动对节点测试HTTP时延，择优 / 随机绑定到出站。
+自动对节点测试HTTP时延，择优绑定每个订阅的延迟前10个到出站。
 
 ### shutdownProxy.py
 

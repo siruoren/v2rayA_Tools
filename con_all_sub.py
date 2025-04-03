@@ -32,30 +32,13 @@ def load_config():
     RANDOM_SELECTED_NODE = CONFIG['random_selected_node']
     NODE_NAME_BLACKLIST = CONFIG['node_name_blacklist']
     NODE_PROTOCOL_BLACKLIST = CONFIG['node_protocol_blacklist']
-    PROXY_HOST = get_container_ip(CONFIG['v2raya_container_name'])
+    PROXY_HOST = get_container_ip(CONFIG['v2raya_ip'])
     V2RAYA_CONFIG = CONFIG['v2raya_config']
 
-def get_container_ip(container_name):
+def get_container_ip(ip):
     '''获取容器的IP地址'''
-    try:
-        # 获取容器的详细信息
-        result = subprocess.run(
-            ["docker", "inspect", container_name],
-            capture_output=True,
-            text=True,
-            check=True
-        )
 
-        # 解析 JSON 输出
-        inspect_output = json.loads(result.stdout)
-
-        # 获取容器的 IP 地址
-        ip_address = inspect_output[0]['NetworkSettings']['Networks'].get('1panel-network',{}).get('IPAddress','localhost')
-
-        return ip_address
-    except subprocess.CalledProcessError as e:
-        logging.info(f"Error inspecting container: {e}")
-        return 'localhost'
+        return ip
 
 
 def check_port():
@@ -218,15 +201,15 @@ def reset_proxy(sub_num):
         logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 停用代理: {disable_Proxy()}")
     else:
         msg = "启动代理"
-        logging.info("当前代理停用状态")
-    # connectedServer = status["data"]["touch"]["connectedServer"]    # 获取连接的服务器
-    # if connectedServer: # 如果有连接的节点
-    #     for connect in connectedServer:connect_cancel(connect)  # 则都取消
+        logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 当前代理停用状态")
+    connectedServer = status["data"]["touch"]["connectedServer"]    # 获取连接的服务器
+    if connectedServer: # 如果有连接的节点
+        for connect in connectedServer:connect_cancel(connect)  # 则都取消
     if len(good_nodes_id) > 0:
         connect_on(good_nodes_id, outbounds, status,sub_num)
         logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 启动代理: {enable_Proxy()}")
         end_time = int(time.time())
-        logging.info(f"{msg} 耗时 {end_time - start_time} 秒")
+        logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> {msg} 耗时 {end_time - start_time} 秒")
     else:logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 没有可用的节点")
 
 def main(sub_num):

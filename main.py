@@ -209,7 +209,7 @@ def reset_proxy(sub_num):
     if connectedServer: # 如果有当前订阅连接的节点
         for connect in connectedServer:
             if f"""'sub': {sub_id},""" in str(connect):
-                logging.info(f"start to cancel {connect}")
+                logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> start to cancel {connect}")
                 connect_cancel(connect)  # 则都取消
     if len(good_nodes_id) > 0:
         connect_on(good_nodes_id, outbounds, status,sub_num)

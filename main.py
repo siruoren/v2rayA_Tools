@@ -166,7 +166,7 @@ def nodes_filter(status, outbounds_num,sub_num) -> list:
     else:
         # 根据 pingLatency ping的结果由小到大排序
         healthy_nodes.sort(key=lambda x: x["pingLatency"])
-    return [node["id"] for node in healthy_nodes[0:20]]
+    return [node["id"] for node in healthy_nodes[0:10]]
 
 def test_nodes(sub_num):
     '''测试节点'''
@@ -244,9 +244,9 @@ if __name__ == "__main__":
     login()
     for sub_num in range(1,int(CONFIG["apply_subscription_id"])+1):
         try:
-            logging.info(f"start to connect sub_id:{sub_num}......")
+            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> Start to connect sub_id: {sub_num}")
             main(sub_num)
         except:
-            logging.info(f"There is no sub_id:{sub_num},skip......")
+            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> There is no sub_id:{sub_num},skip ")
     
-    logging.info(f"Start Enable Proxy: {enable_Proxy()}")
+    logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> Start Enable Proxy: {enable_Proxy()}")

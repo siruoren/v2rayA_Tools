@@ -175,7 +175,7 @@ def test_nodes(sub_num):
     # 获取订阅的节点延迟
     sub_id = sub_num
     if len(status["data"]["touch"]["subscriptions"]) < int(sub_id):
-        logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 未找到订阅id:{sub_num}, 请检查订阅是否正常")
+        logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 未找到订阅ID: {int(sub_num)-1}, 请检查订阅是否正常")
         return 1
     for sub in status["data"]["touch"]["subscriptions"]:
         if sub["id"] == sub_id:
@@ -244,9 +244,9 @@ if __name__ == "__main__":
     login()
     for sub_num in range(1,int(CONFIG["apply_subscription_id"])+1):
         try:
-            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 开始测试订阅项目ID: {sub_num}")
+            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 开始测试订阅项目ID: {int(sub_num) - 1}")
             main(sub_num)
         except:
-            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 未找到订阅项目ID: {sub_num},skip ")
+            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 未找到订阅项目ID: {int(sub_num) - 1},skip ")
     
     logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 开始启动代理: {enable_Proxy()}")

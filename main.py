@@ -209,7 +209,7 @@ def reset_proxy(sub_num):
     if connectedServer: # 如果有当前订阅连接的节点
         for connect in connectedServer:
             if f"""'sub': {sub_id},""" in str(connect):
-                logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> start to cancel {connect}")
+                logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 开始取消连接 {connect}")
                 connect_cancel(connect)  # 则都取消
     if len(good_nodes_id) > 0:
         connect_on(good_nodes_id, outbounds, status,sub_num)
@@ -244,9 +244,9 @@ if __name__ == "__main__":
     login()
     for sub_num in range(1,int(CONFIG["apply_subscription_id"])+1):
         try:
-            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> Start to connect sub_id: {sub_num}")
+            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 开始测试订阅项目ID: {sub_num}")
             main(sub_num)
         except:
-            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> There is no sub_id:{sub_num},skip ")
+            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 未找到订阅项目ID: {sub_num},skip ")
     
-    logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> Start Enable Proxy: {enable_Proxy()}")
+    logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 开始启动代理: {enable_Proxy()}")

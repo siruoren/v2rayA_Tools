@@ -166,7 +166,7 @@ def nodes_filter(status, outbounds_num,sub_num) -> list:
     else:
         # 根据 pingLatency ping的结果由小到大排序
         healthy_nodes.sort(key=lambda x: x["pingLatency"])
-    return [node["id"] for node in healthy_nodes[0:10]]
+    return [node["id"] for node in healthy_nodes[0:20]]
 
 def test_nodes(sub_num):
     '''测试节点'''

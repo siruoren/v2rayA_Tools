@@ -54,16 +54,16 @@ def main():
     start_time = int(time.time())
     sub_info = status["data"]["touch"]["subscriptions"]
     if status["data"]["running"]:
-        logging.info(f"停用代理: {disable_Proxy()}")
+        logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 停用代理: {disable_Proxy()}")
     for sub in sub_info:
         sub_start_time = int(time.time())
         updateSub(sub["id"])
         sub_end_time = int(time.time())
-        logging.info(f'''更新订阅 {sub.get("remarks", f"ID: {sub['id']}")} 耗时 {sub_end_time - sub_start_time} 秒''')
+        logging.info(f'''{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 更新订阅 {sub.get("remarks", f"ID: {sub['id']}")} 耗时 {sub_end_time - sub_start_time} 秒''')
     end_time = int(time.time())
     if status["data"]["running"]:
-        logging.info(f"启用代理: {enable_Proxy()}")
-    logging.info(f"更新了{len(sub_info)}个订阅, 共耗时 {end_time - start_time} 秒")
+        logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 启用代理: {enable_Proxy()}")
+    logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 更新了{len(sub_info)}个订阅, 共耗时 {end_time - start_time} 秒")
 
 if __name__ == "__main__":
 

@@ -104,16 +104,16 @@ def bulid_request_body(node_ids,sub_num) -> list:
 
 def test_httpLatency(nodes):
     '''测试节点延迟'''
-    logging.info(f"开始测试节点延迟, 节点共 {len(nodes)} 组, 每组节点数量上限为 {NUMBER_OF_NODE_GROUP_MEMBERS}")
+    logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 开始测试节点延迟, 节点共 {len(nodes)} 组, 每组节点数量上限为 {NUMBER_OF_NODE_GROUP_MEMBERS}")
     num = 1
     timestamp = int(time.time())
     start_time = timestamp
     for str_nodes in nodes:
         response = requests.get(f"{HOST}/api/httpLatency?whiches={str_nodes}", headers={"Authorization": TOKEN})
-        logging.info(f"进度 {num}/{len(nodes)} , 本组耗时 {int(time.time()) - timestamp} 秒")
+        logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 进度 {num}/{len(nodes)} , 本组耗时 {int(time.time()) - timestamp} 秒")
         num += 1
         timestamp = int(time.time())
-    logging.info(f"测试节点延迟完成, 共耗时 {int(time.time()) - start_time} 秒")
+    logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 测试节点延迟完成, 共耗时 {int(time.time()) - start_time} 秒")
 
 def connect_on(nodes_id, outbounds, status,sub_num):
     '''为出站连接节点
@@ -137,7 +137,7 @@ def connect_on(nodes_id, outbounds, status,sub_num):
             requests.post(url, json=payload, headers={"Authorization": TOKEN, "content-type": "application/json"})
             for node in sub_nodes_info:
                 if node["id"] == node_id:node_info = node 
-            logging.info(f"为出站 {outbound} 连接节点 {node_info.get('name')}, 延迟 {node_info.get('pingLatency')}")
+            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 为出站 {outbound} 连接节点 {node_info.get('name')}, 延迟 {node_info.get('pingLatency')}")
 
 
 def connect_cancel(connect):
@@ -156,7 +156,7 @@ def nodes_filter(status, outbounds_num,sub_num) -> list:
             healthy_nodes.append(node)
 
             
-    logging.info(f"共有 {len(healthy_nodes)} 个健康节点")
+    logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 共有 {len(healthy_nodes)} 个健康节点")
     for node in healthy_nodes:
         # 字符替换, node["pingLatency"] 的值去掉 "ms" 字符
         node["pingLatency"] = int(node["pingLatency"].replace("ms", ""))
@@ -175,7 +175,7 @@ def test_nodes(sub_num):
     # 获取订阅的节点延迟
     sub_id = sub_num
     if len(status["data"]["touch"]["subscriptions"]) < int(sub_id):
-        logging.info(f"未找到订阅id:{sub_num}, 请检查订阅是否正常")
+        logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 未找到订阅id:{sub_num}, 请检查订阅是否正常")
         return 1
     for sub in status["data"]["touch"]["subscriptions"]:
         if sub["id"] == sub_id:
@@ -189,7 +189,7 @@ def test_nodes(sub_num):
             for node in sub["servers"]:
                 if node["net"] in NODE_PROTOCOL_BLACKLIST:node_ids.remove(node["id"])
     msg = f" , 排除了 {node_num - len(node_ids)} 个节点, 实际 {len(node_ids)} 个节点" if len(node_ids) < node_num else ""
-    logging.info(f"准备测试节点延迟, 本次选择的订阅为 {sub_name} , 节点数量为 {node_num}{msg}")
+    logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 准备测试节点延迟, 本次选择的订阅为 {sub_name} , 节点数量为 {node_num}{msg}")
     test_httpLatency(bulid_request_body(node_ids,sub_id))
 
 def reset_proxy(sub_num):
@@ -201,10 +201,10 @@ def reset_proxy(sub_num):
     start_time = int(time.time())
     if status["data"]["running"]:
         msg = "重启代理"
-        logging.info(f"停用代理: {disable_Proxy()}")
+        logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 停用代理: {disable_Proxy()}")
     else:
         msg = "启动代理"
-        logging.info("当前代理停用状态")
+        logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 当前代理停用状态")
     connectedServer = status["data"]["touch"]["connectedServer"]    # 获取连接的服务器
     if connectedServer: # 如果有当前订阅连接的节点
         for connect in connectedServer:
@@ -213,10 +213,10 @@ def reset_proxy(sub_num):
                 connect_cancel(connect)  # 则都取消
     if len(good_nodes_id) > 0:
         connect_on(good_nodes_id, outbounds, status,sub_num)
-        logging.info(f"启动代理: {enable_Proxy()}")
+        logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 启动代理: {enable_Proxy()}")
         end_time = int(time.time())
-        logging.info(f"{msg} 耗时 {end_time - start_time} 秒")
-    else:logging.info(f"没有可用的节点: {enable_Proxy()}")
+        logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> {msg} 耗时 {end_time - start_time} 秒")
+    else:logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 没有可用的节点: {enable_Proxy()}")
 
 
 

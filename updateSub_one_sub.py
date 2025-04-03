@@ -55,14 +55,14 @@ def main(sub_num):
     applied_sub_id = sub_num
     sub_start_time = int(time.time())
     if status["data"]["running"]:
-        logging.info(f"停用代理: {disable_Proxy()}")
+        logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 停用代理: {disable_Proxy()}")
         updateSub(applied_sub_id)
-        logging.info(f"启用代理: {enable_Proxy()}")
+        logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 启用代理: {enable_Proxy()}")
     else:updateSub(applied_sub_id)
     sub_end_time = int(time.time())
     for sub in sub_info:
         if sub["id"] == applied_sub_id:
-            logging.info(f'''更新订阅 {sub.get("remarks", f"ID: {sub['id']}")} 耗时 {sub_end_time - sub_start_time} 秒''')
+            logging.info(f'''{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 更新订阅 {sub.get("remarks", f"ID: {sub['id']}")} 耗时 {sub_end_time - sub_start_time} 秒''')
             break
 
 if __name__ == "__main__":
@@ -71,4 +71,4 @@ if __name__ == "__main__":
         try:
             main(sub_num)
         except:
-            logging.info(f"There is no {sub_id},skip......")
+            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> There is no {sub_id},skip......")

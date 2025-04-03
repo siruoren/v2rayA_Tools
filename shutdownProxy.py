@@ -46,7 +46,7 @@ def main():
     status = get_status()
     # 如果代理开启, 则停用代理
     if status["data"]["running"]:print(f"停用代理: {disable_Proxy()}")
-    else:print("当前代理停用状态")
+    else:print(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 当前代理停用状态")
     connectedServer = status["data"]["touch"]["connectedServer"] # 获取连接的服务器
     if connectedServer: # 如果有连接的节点
         for connect in connectedServer:connect_cancel(connect)  # 则都取消

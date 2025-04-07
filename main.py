@@ -213,6 +213,7 @@ def reset_proxy(sub_num):
                 connect_cancel(connect)  # 则都取消
     if len(good_nodes_id) > 0:
         connect_on(good_nodes_id, outbounds, status,sub_num)
+        time.sleep(5)
         logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 启动代理: {enable_Proxy()}")
         end_time = int(time.time())
         logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> {msg} 耗时 {end_time - start_time} 秒")
@@ -248,5 +249,5 @@ if __name__ == "__main__":
             main(sub_num)
         except:
             logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 未找到订阅项目ID: {int(sub_num) - 1},skip ")
-    
+    time.sleep(5)
     logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 开始启动代理: {enable_Proxy()}")

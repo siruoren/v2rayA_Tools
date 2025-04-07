@@ -249,5 +249,10 @@ if __name__ == "__main__":
             main(sub_num)
         except:
             logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 未找到订阅项目ID: {int(sub_num) - 1},skip ")
-    time.sleep(5)
+    time.sleep(10)
     logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 开始启动代理: {enable_Proxy()}")
+
+
+
+
+    

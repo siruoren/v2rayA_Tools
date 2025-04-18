@@ -153,7 +153,7 @@ def nodes_filter(status, outbounds_num,sub_num) -> list:
     healthy_nodes = []
     for node in nodes:
         if "ms" in node["pingLatency"]:
-            if int(node["pingLatency"].replace("ms", "")) <= 1000:
+            if int(node["pingLatency"].replace("ms", "")) <= 3000:
                 healthy_nodes.append(node)
 
             

@@ -153,7 +153,7 @@ def nodes_filter(status, outbounds_num,sub_num) -> list:
     healthy_nodes = []
     for node in nodes:
         if "ms" in node["pingLatency"]:
-            if int(node["pingLatency"].replace("ms", "")) <= 2000:
+            if int(node["pingLatency"].replace("ms", "")) <= 1500:
                 healthy_nodes.append(node)
 
             
@@ -167,7 +167,7 @@ def nodes_filter(status, outbounds_num,sub_num) -> list:
     else:
         # 根据 pingLatency ping的结果由小到大排序
         healthy_nodes.sort(key=lambda x: x["pingLatency"])
-    return [node["id"] for node in healthy_nodes]
+    return [node["id"] for node in healthy_nodes[0:10]]
 
 def test_nodes(sub_num):
     '''测试节点'''

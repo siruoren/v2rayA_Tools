@@ -55,17 +55,17 @@ def add_sub(sub_url,add_sub_url=True):
             try:
                 response = requests.request("POST", url, json=payload, headers=headers, timeout=30)
                 if response.json()["code"] != 'FAIL':
-                    logging.info(f"添加订阅成功，尝试次数: {retry+1}")
+                    logging.info(f"添加订阅{sub_url}成功，尝试次数: {retry+1}")
                     break
                 else:
-                    logging.warning(f"添加订阅失败，尝试次数: {retry+1}")
+                    logging.warning(f"添加订阅{sub_url}失败，尝试次数: {retry+1}")
                     Exception(response.json()["code"])
             except Exception as e:
-                logging.warning(f"添加订阅失败 (尝试 {retry+1}/{max_retries}): {e}")
+                logging.warning(f"添加订阅{sub_url}失败 (尝试 {retry+1}/{max_retries}): {e}")
                 if retry < max_retries - 1:
                     time.sleep(2)  # 等待2秒后重试
                 else:
-                    logging.error(f"添加订阅失败，已达到最大重试次数 {max_retries}")
+                    logging.error(f"添加订阅{sub_url}失败，已达到最大重试次数 {max_retries}")
 
 
 if __name__ == "__main__":

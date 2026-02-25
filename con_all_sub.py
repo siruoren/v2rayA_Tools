@@ -38,7 +38,7 @@ def load_config():
 def get_container_ip(ip):
     '''获取容器的IP地址'''
 
-        return ip
+    return ip
 
 
 def check_port():

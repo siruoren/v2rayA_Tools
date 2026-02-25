@@ -1,5 +1,5 @@
 {
-    "v2raya_ip": "localhost",
+    "v2raya_ip": "192.168.31.120",
     "webui_port": 2017,
     "forced_reset_proxy": true,
     "username": "admin",

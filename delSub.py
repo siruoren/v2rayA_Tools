@@ -43,7 +43,10 @@ def del_sub(sub_url_head):
     sub_info = status["data"]["touch"]["subscriptions"]
     for sub in sub_info:
         if sub_url_head in sub["address"] :
-            del_list.append(sub["id"])
+            item = {}
+            item["id"] = sub["id"]
+            item["address"]= sub["address"]
+            del_list.append(item)
     if len(del_list) > 7:
         for del_id in del_list[0:5]:
             max_retries = 20
@@ -51,21 +54,21 @@ def del_sub(sub_url_head):
                 try:
                     # 删除订阅
                     url = f"{HOST}/api/touch"
-                    payload = {"id": del_id,"_type": "subscription"}
+                    payload = {"touches": [{"id": del_id["id"], "_type": "subscription"}]}
                     headers = {"authorization": TOKEN,"content-type": "application/json"}
                     response = requests.request("DELETE", url, json=payload, headers=headers, timeout=30)
                     if response.json()["code"] != 'FAIL':
-                        logging.info(f"删除订阅成功，尝试次数: {retry+1}")
+                        logging.info(f"删除订阅id: {del_id['id']} {del_id['address']} 成功，尝试次数: {retry+1}")
                         break   
                     else:
-                        logging.warning(f"删除订阅失败，尝试次数: {retry+1}")
+                        logging.warning(f"删除订阅id: {del_id['id']} {del_id['address']} 失败，尝试次数: {retry+1}")
                         Exception(response.json()["code"])
                 except Exception as e:
-                    logging.warning(f"删除订阅失败 (尝试 {retry+1}/{max_retries}): {e}")
+                    logging.warning(f"删除订阅id: {del_id['id']} {del_id['address']} 失败 (尝试 {retry+1}/{max_retries}): {e}")
                     if retry < max_retries - 1:
                         time.sleep(2)  # 等待2秒后重试
                     else:
-                        logging.error(f"添加订阅失败，已达到最大重试次数 {max_retries}")
+                        logging.error(f"删除订阅id: {del_id['id']} {del_id['address']} 失败，已达到最大重试次数 {max_retries}")
 
 if __name__ == "__main__":
     

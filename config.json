@@ -5,7 +5,7 @@
     "username": "admin",
     "password": "password",
     "apply_subscription_id": 10,
-    "number_of_node_group_members": 110,
+    "number_of_node_group_members": 10,
     "random_selected_node": false,
     "node_name_blacklist":[],
     "node_protocol_blacklist":[],

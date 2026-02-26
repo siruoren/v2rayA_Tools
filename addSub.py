@@ -58,8 +58,8 @@ def add_sub(sub_url,add_sub_url=True):
                     logging.info(f"添加订阅{sub_url}成功，尝试次数: {retry+1}")
                     break
                 else:
-                    logging.warning(f"添加订阅{sub_url}失败，尝试次数: {retry+1}")
-                    Exception(response.json()["code"])
+                        logging.warning(f"添加订阅{sub_url}失败，尝试次数: {retry+1}")
+                        raise Exception(response.json()["code"])
             except Exception as e:
                 logging.warning(f"添加订阅{sub_url}失败 (尝试 {retry+1}/{max_retries}): {e}")
                 if retry < max_retries - 1:
@@ -71,6 +71,9 @@ def add_sub(sub_url,add_sub_url=True):
 if __name__ == "__main__":
     
     m_today = time.strftime("%Y%m%d", time.localtime())
-    m_url=f"https://clashgithub.com/wp-content/uploads/rss/{m_today}.txt"
-    add_sub(m_url)
-    time.sleep(1)
+    with open(f"addSub_template.txt", "r") as f:
+        for line in f:
+            line = line.strip()
+            m_url=line.replace('replace_m_today',m_today)
+            add_sub(m_url)
+            time.sleep(1)

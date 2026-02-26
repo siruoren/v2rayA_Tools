@@ -1,2 +1,5 @@
-https://clashgithub.com/wp-content/uploads/rss/replace_m_today.txt
-https://ghfast.top/https://raw.githubusercontent.com/siruoren/Proxy_List/main/datiya/replace_m_today-v2ray.txt
+add https://clashgithub.com/wp-content/uploads/rss/replace_m_today.txt
+add https://ghfast.top/https://raw.githubusercontent.com/siruoren/Proxy_List/main/datiya/replace_m_today-v2ray.txt
+
+del https://clashgithub.com/wp-content/uploads/rss
+del https://ghfast.top/https://raw.githubusercontent.com/siruoren/Proxy_List/main/datiya

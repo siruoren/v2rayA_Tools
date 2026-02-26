@@ -73,7 +73,8 @@ if __name__ == "__main__":
     m_today = time.strftime("%Y%m%d", time.localtime())
     with open(f"addSub_template.txt", "r") as f:
         for line in f:
-            line = line.strip()
-            m_url=line.replace('replace_m_today',m_today)
-            add_sub(m_url)
-            time.sleep(1)
+            if 'add ' in line:
+                line = line.strip().split(' ')[1]
+                m_url=line.replace('replace_m_today',m_today)
+                add_sub(m_url)
+                time.sleep(1)

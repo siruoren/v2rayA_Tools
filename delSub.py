@@ -71,7 +71,10 @@ def del_sub(sub_url_head):
                         logging.error(f"删除订阅id: {del_id['id']} {del_id['address']} 失败，已达到最大重试次数 {max_retries}")
 
 if __name__ == "__main__":
-    
-    m_url=f"https://clashgithub.com/wp-content/uploads"
-    del_sub(m_url)
-    time.sleep(1)
+    with open(f"addSub_template.txt", "r") as f:
+        for line in f:
+            if 'del ' in line:
+                line = line.strip().split(' ')[1]
+                m_url=line
+                del_sub(m_url)
+                time.sleep(1)

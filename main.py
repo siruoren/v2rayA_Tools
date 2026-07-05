@@ -153,8 +153,13 @@ def nodes_filter(status, outbounds_num,sub_num) -> list:
     healthy_nodes = []
     for node in nodes:
         if "ms" in node["pingLatency"]:
-            if int(node["pingLatency"].replace("ms", "")) <= 1500:
-                healthy_nodes.append(node)
+            latency = int(node["pingLatency"].replace("ms", ""))
+            if int(sub_num) == 1:
+                if latency > 0:
+                    healthy_nodes.append(node)
+            else:
+                if latency <= 1500:
+                    healthy_nodes.append(node)
 
             
     logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 共有 {len(healthy_nodes)} 个健康节点")

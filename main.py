@@ -154,12 +154,8 @@ def nodes_filter(status, outbounds_num,sub_num) -> list:
     for node in nodes:
         if "ms" in node["pingLatency"]:
             latency = int(node["pingLatency"].replace("ms", ""))
-            if int(sub_num) == 1:
-                if latency > 0:
-                    healthy_nodes.append(node)
-            else:
-                if latency <= 1500:
-                    healthy_nodes.append(node)
+            if latency <= 1500:
+                healthy_nodes.append(node)
 
             
     logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 共有 {len(healthy_nodes)} 个健康节点")
@@ -172,7 +168,7 @@ def nodes_filter(status, outbounds_num,sub_num) -> list:
     else:
         # 根据 pingLatency ping的结果由小到大排序
         healthy_nodes.sort(key=lambda x: x["pingLatency"])
-    return [node["id"] for node in healthy_nodes[0:10]]
+    return [node["id"] for node in healthy_nodes]
 
 def test_nodes(sub_num):
     '''测试节点'''
@@ -234,18 +230,6 @@ def main(sub_num):
     reset_proxy(sub_num)
     time.sleep(2)
 
-# def main(sub_num):
-#     load_config()
-#     reset_switch = 1 if FORCED_RESET_PROXY else check_port()
-#     if reset_switch == 1:
-#         login()
-#         test_nodes(sub_num)
-#     elif reset_switch == 0:logging.info("无异常端口")
-#     while reset_switch == 1:
-#         reset_proxy(sub_num)
-#         reset_switch = check_port()
-#         if reset_switch == 1:logging.info("有端口出错, 重新设置代理")
-
 if __name__ == "__main__":
     load_config()
     login()
@@ -254,7 +238,8 @@ if __name__ == "__main__":
             logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 开始测试订阅项目ID: {int(sub_num) - 1}")
             main(sub_num)
         except:
-            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 未找到订阅项目ID: {int(sub_num) - 1},skip ")
+            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 未找到订阅项目ID: {int(sub_num) - 1}, 退出")
+            break
     time.sleep(10)
     logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 开始启动代理: {enable_Proxy()}")
 

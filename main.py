@@ -170,15 +170,19 @@ def nodes_filter(status, outbounds_num,sub_num) -> list:
         healthy_nodes.sort(key=lambda x: x["pingLatency"])
     return [node["id"] for node in healthy_nodes]
 
+class SubscriptionNotFoundError(Exception):
+    '''订阅ID未找到异常'''
+    pass
+
 def test_nodes(sub_num):
-    '''测试节点'''
+    '''测试节点，调用前需确保代理已停用'''
     # 获取服务状态
     status = get_status()
     # 获取订阅的节点延迟
     sub_id = sub_num
     if len(status["data"]["touch"]["subscriptions"]) < int(sub_id):
         logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 未找到订阅ID: {int(sub_num)-1}, 请检查订阅是否正常")
-        return 1
+        raise SubscriptionNotFoundError(f"订阅ID {int(sub_num)-1} 未找到")
     for sub in status["data"]["touch"]["subscriptions"]:
         if sub["id"] == sub_id:
             node_num = len(sub["servers"])
@@ -226,22 +230,49 @@ def reset_proxy(sub_num):
 def main(sub_num):
     load_config()
     login()
-    test_nodes(sub_num)
-    reset_proxy(sub_num)
-    time.sleep(2)
+    try:
+        # 确保代理停用后再检测延迟
+        status = get_status()
+        if status["data"]["running"]:
+            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 代理正在运行，停用代理: {disable_Proxy()}")
+        else:
+            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 代理已停用，开始检测延迟")
+        test_nodes(sub_num)
+        reset_proxy(sub_num)
+        time.sleep(2)
+    finally:
+        # 无论是否报错，确保最后代理处于启用状态
+        logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 确保代理启用: {enable_Proxy()}")
 
 if __name__ == "__main__":
     load_config()
     login()
-    for sub_num in range(1,int(CONFIG["apply_subscription_id"])+1):
-        try:
-            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 开始测试订阅项目ID: {int(sub_num) - 1}")
-            main(sub_num)
-        except:
-            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 未找到订阅项目ID: {int(sub_num) - 1}, 退出")
-            break
-    time.sleep(10)
-    logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 开始启动代理: {enable_Proxy()}")
+    try:
+        # 所有订阅检测前，统一停用代理
+        status = get_status()
+        if status["data"]["running"]:
+            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 停用代理: {disable_Proxy()}")
+        else:
+            logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 代理已停用")
+        for sub_num in range(1,int(CONFIG["apply_subscription_id"])+1):
+            try:
+                logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 开始测试订阅项目ID: {int(sub_num) - 1}")
+                # 每个订阅检测前再次确保代理停用
+                cur_status = get_status()
+                if cur_status["data"]["running"]:
+                    logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 代理正在运行，停用代理: {disable_Proxy()}")
+                test_nodes(sub_num)
+                reset_proxy(sub_num)
+                time.sleep(2)
+            except SubscriptionNotFoundError:
+                logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 订阅项目ID {int(sub_num) - 1} 未找到，退出后续循环")
+                break
+            except Exception as e:
+                logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 订阅项目ID {int(sub_num) - 1} 处理异常: {e}")
+    finally:
+        # 无论是否报错，确保最后代理处于启用状态
+        time.sleep(10)
+        logging.info(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} --> 确保代理启用: {enable_Proxy()}")
 
 
 
